@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const slugify = require('slugify');
+const geocoder = require('../utils/geocoder')
 
 const jobSchema = new mongoose.Schema({
     title:{
@@ -26,6 +27,7 @@ const jobSchema = new mongoose.Schema({
         type:String,
         required: [true, 'pls provide address']
     },
+    //geocoder api, mapquest developer
     location:{
         type: {
             type:String,
@@ -125,6 +127,21 @@ const jobSchema = new mongoose.Schema({
 
     }
 })
+
+//setting up location
+jobSchema.pre('save', async function(next){
+    const loc = await geocoder.geocode(this.address);
+    this.location ={
+        type:'Pont',
+        coordinates: [loc[0].longitude,loc[0].latitude],
+        formattedAddress: loc[0].formattedAddress,
+        city: loc[0].city,
+        state: loc[0].stateCode,
+        zipcode: loc[0].zipcode,
+        country: loc[0].countryCode
+    }
+})
+
 
 
 //creating job slug before saving
