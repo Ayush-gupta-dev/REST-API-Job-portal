@@ -99,3 +99,19 @@ exports.deleteJob = async (req,res,next) => {
     
     
 }
+
+//get a single job with id and slug: /api/v1/job/:id/:slug
+
+exports.get_single_job = async (req,res,next)=>{
+    let job = await Job.findById(req.params.id)
+    if(!job){
+        return res.status(400).json({
+            success:false,
+            message: "job not found"
+        });
+    }
+    res.status(200).json({
+        success: true,
+        data: job
+    })
+}
