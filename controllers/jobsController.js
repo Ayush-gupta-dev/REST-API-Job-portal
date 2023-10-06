@@ -63,7 +63,8 @@ exports.getJobsInRadius = async (req,res,next)=>{
 //update a job => /api/v1/jobs/:id
 
 exports.updateJob = async (req,res,next) => {
-    let job = await job.findById(req.params.id);
+    console.log('called')
+    let job = await Job.findById(req.params.id);
     if(!job){
         return res.status(400).json({
             success:false,
@@ -72,8 +73,7 @@ exports.updateJob = async (req,res,next) => {
     }
     job = await Job.findByIdAndUpdate(req.params.id, req.body ,{
         new: true,
-        newValidators: true,
-        useFindAndModify: false
+        newValidators: true
     });
     res.status(200).json({
         success:true,
