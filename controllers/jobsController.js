@@ -60,10 +60,9 @@ exports.getJobsInRadius = async (req,res,next)=>{
 
 }
 
-//update a job => /api/v1/jobs/:id
+//update a job => /api/v1/job/:id
 
 exports.updateJob = async (req,res,next) => {
-    console.log('called')
     let job = await Job.findById(req.params.id);
     if(!job){
         return res.status(400).json({
@@ -80,4 +79,23 @@ exports.updateJob = async (req,res,next) => {
         message: 'job is updated',
         data: job
     })
+}
+
+// Delete a job => /api/v1/job/:id
+
+exports.deleteJob = async (req,res,next) => {
+    let job = await Job.findById(req.params.id)
+    if(!job){
+        return res.status(400).json({
+            success:false,
+            message: "Job not found"
+        })
+    }
+    job = await Job.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+        success:true,
+        message: 'Job is deleted'
+    })
+    
+    
 }
